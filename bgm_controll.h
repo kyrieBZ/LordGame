@@ -13,6 +13,7 @@
 #include <QJsonArray>
 #include <QRandomGenerator>
 #include <QTimer>
+#include <QDebug>
 
 #include "cards.h"
 #include "playhand.h"

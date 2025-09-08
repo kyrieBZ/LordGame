@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+#include <QResource>
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +19,8 @@ int main(int argc, char *argv[])
             break;
         }
     }
+    //注册资源文件
+    QResource::registerResource("./resource.rcc");
     Loading w;
     w.show();
     return a.exec();

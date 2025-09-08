@@ -209,7 +209,6 @@ Cards Strategy::getGreaterCards(PlayHand type)
 {
     //1.出牌玩家与当前玩家是不是一伙的
     Player * pendPlayer=m_player->getPendPlayer();
-    qDebug()<<pendPlayer;
     if(pendPlayer != nullptr && pendPlayer->getRole() != m_player->getRole() && pendPlayer->getCards().cardCount() <= 3){
         QVector<Cards> bombs=findCardsByCount(4);
         //若当前出牌玩家出的牌也是炸弹则需要比较点数，找到比对方更大的炸弹
@@ -218,14 +217,14 @@ Cards Strategy::getGreaterCards(PlayHand type)
                 //找到了比type大的炸弹
                 return bombs[i];
             }
-            //搜索玩家手里有没有王炸
-            Cards sj=findSamePointCards(Card::Card_SJ,1);
-            Cards bj=findSamePointCards(Card::Card_BJ,1);
-            if(!sj.isEmpty() && !bj.isEmpty()){
-                Cards jokers;
-                jokers<<sj<<bj;
-                return jokers;
-            }
+        }
+        //搜索玩家手里有没有王炸
+        Cards sj=findSamePointCards(Card::Card_SJ,1);
+        Cards bj=findSamePointCards(Card::Card_BJ,1);
+        if(!sj.isEmpty() && !bj.isEmpty()){
+            Cards jokers;
+            jokers<<sj<<bj;
+            return jokers;
         }
     }
     //2.当前玩家与下一个玩家是不是一伙的
@@ -234,8 +233,8 @@ Cards Strategy::getGreaterCards(PlayHand type)
     Cards remain=m_cards;
     remain.remove(Strategy(m_player,remain).pickOptimalSeqSingles());
     //设置匿名函数可调用  (使用可调用对象绑定)
-    auto beatCard=std::bind([=](Cards &cards){
-        QVector<Cards> beatCardsArray=Strategy(m_player,remain).findCardType(type,true);
+    auto beatCard=std::bind([=](const Cards &cards){
+        QVector<Cards> beatCardsArray=Strategy(m_player,cards).findCardType(type,true);
         if(!beatCardsArray.isEmpty()){
             if(nextPlayer->getRole() != m_player->getRole() && nextPlayer->getCards().cardCount() <= 2){
                 return beatCardsArray.back();//打出其中最大的牌
@@ -257,27 +256,29 @@ Cards Strategy::getGreaterCards(PlayHand type)
         }
     }
 
-    QVector<Cards> beatCardsArray=Strategy(m_player,remain).findCardType(type,true);
-    if(!beatCardsArray.isEmpty()){
-        if(nextPlayer->getRole() != m_player->getRole() && nextPlayer->getCards().cardCount() <= 2){
-            return beatCardsArray.back();//打出其中最大的牌
-        }
-        else{
-            return beatCardsArray.front();//打出其中最小的牌
-        }
-    }
-    else{
-        QVector<Cards> beatCardsArray=Strategy(m_player,m_cards).findCardType(type,true);
-        if(!beatCardsArray.isEmpty()){
-            if(nextPlayer->getRole() != m_player->getRole() && nextPlayer->getCards().cardCount() <= 2){
-                return beatCardsArray.back();//打出其中最大的牌
-            }
-            else{
-                return beatCardsArray.front();//打出其中最小的牌
-            }
-        }
-    }
     return Cards();
+
+    // QVector<Cards> beatCardsArray=Strategy(m_player,remain).findCardType(type,true);
+    // if(!beatCardsArray.isEmpty()){
+    //     if(nextPlayer->getRole() != m_player->getRole() && nextPlayer->getCards().cardCount() <= 2){
+    //         return beatCardsArray.back();//打出其中最大的牌
+    //     }
+    //     else{
+    //         return beatCardsArray.front();//打出其中最小的牌
+    //     }
+    // }
+    // else{
+    //     QVector<Cards> beatCardsArray=Strategy(m_player,m_cards).findCardType(type,true);
+    //     if(!beatCardsArray.isEmpty()){
+    //         if(nextPlayer->getRole() != m_player->getRole() && nextPlayer->getCards().cardCount() <= 2){
+    //             return beatCardsArray.back();//打出其中最大的牌
+    //         }
+    //         else{
+    //             return beatCardsArray.front();//打出其中最小的牌
+    //         }
+    //     }
+    // }
+    // return Cards();
 }
 
 bool Strategy::whetherToBeat(Cards &cards)
@@ -328,7 +329,7 @@ Cards Strategy::findSamePointCards(Card::CardPoint point, int count)
     }
     //大小王
     if(point == Card::Card_SJ || point == Card::Card_BJ){
-        if(count > 1 || count > 4){
+        if(count > 1){
             return Cards();
         }
         Card card;
@@ -448,7 +449,8 @@ QVector<Cards> Strategy::findCardType(PlayHand hand, bool beat)
 void Strategy::pickSeqSingles(Cards &cards,QVector<QVector<Cards>> &allSeqRecord,QVector<Cards> &seqSingle)
 {
     //1.得到所有顺子的组合
-    QVector<Cards> allSeq=Strategy(m_player,cards).findCardType(PlayHand(PlayHand::Hand_Seq_Single,Card::Card_Begin,0),false);
+    QVector<Cards> allSeq=Strategy(m_player,cards).
+                            findCardType(PlayHand(PlayHand::Hand_Seq_Single,Card::Card_Begin,0),false);
     if(allSeq.isEmpty()){
         //结束递归，把满足条件的顺子传递给调用者
         allSeqRecord<<seqSingle;
@@ -462,7 +464,7 @@ void Strategy::pickSeqSingles(Cards &cards,QVector<QVector<Cards>> &allSeqRecord
             Cards aScheme=allSeq[i];
             //将顺子从用户手中删除
             Cards temp=saveCards;
-            temp.remove(allSeq[i]);
+            temp.remove(aScheme);
 
             QVector<Cards> seqArray=seqSingle;
             seqArray<<aScheme;
@@ -507,19 +509,19 @@ QVector<Cards> Strategy::pickOptimalSeqSingles()
             mark+=cardList[j].getPoint()+15;
         }
         seqMarks.insert(i,mark);
-
-        //遍历seqMarks容器
-        int comMark=1000;
-        int value=0;
-        auto it=seqMarks.constBegin();
-        for(;it!=seqMarks.constEnd();it++){
-            if(it.value() < comMark){
-                comMark=it.value();
-                value=it.key();
-            }
-        }
-        return seqRecord[value];
     }
+
+    //遍历seqMarks容器
+    int comMark=1000;
+    int value=0;
+    auto it=seqMarks.constBegin();
+    for(;it!=seqMarks.constEnd();it++){
+        if(it.value() < comMark){
+            comMark=it.value();
+            value=it.key();
+        }
+    }
+    return seqRecord[value];
 }
 
 QVector<Cards> Strategy::getCards(Card::CardPoint point, int number)
@@ -612,7 +614,7 @@ QVector<Cards> Strategy::getSeqPairOrSeqSingle(CardInfo &info)
         //最少3个对  点数最大为A  三个对组成的最大连对为QQKKAA
         //最大的顺子则是10JQKA
         //info.end中记录了终止点数 若找连对则为Q  找顺子则为10
-        for(Card::CardPoint point=info.begin;point<=info.end;(Card::CardPoint)(point+1)){
+        for(Card::CardPoint point=info.begin;point<=info.end;point = (Card::CardPoint)(point + 1)){
             bool found=true;
             Cards seqCards;
             for(int i=0;i<info.extra;i++){

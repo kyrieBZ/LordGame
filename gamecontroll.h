@@ -102,9 +102,9 @@ signals:
     void pendingInfo(Player *player,Cards &cards);
 
 private:
-    Robot* m_robotLeft;    //左侧机器人玩家
-    Robot* m_robotRight; //右侧机器人玩家
-    UserPlayer* m_user;   //真人用户玩家
+    Robot* m_robotLeft = nullptr;    //左侧机器人玩家
+    Robot* m_robotRight = nullptr; //右侧机器人玩家
+    UserPlayer* m_user = nullptr;   //真人用户玩家
 
     //注意：当前玩家是实时发生变化的，既可能为机器人又可能为真人用户
     //，因此需要用Player*
@@ -117,7 +117,7 @@ private:
 
     BetRecord m_betRecord;//记录玩家的抢地主信息
 
-    int m_currBet;//底分
+    int m_currBet = 0;//底分
 
 };
 

@@ -56,7 +56,7 @@ void BGM_Controll::initPlayerList()
 
         //初始化多媒体播放列表
         for(int j=0;j<array.size();j++){
-            m_players[i].mediaList.append(QUrl(array[i].toString()));
+            m_players[i].mediaList.append(QUrl(array[j].toString()));
         }
     }
 }

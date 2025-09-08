@@ -33,7 +33,7 @@ IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = LandLords_resource.res
 SED           = $(QMAKE) -install sed
 MOVE          = move
 SUBTARGETS    =  \
@@ -262,6 +262,7 @@ Makefile: ..\..\LandLords.pro ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\wi
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\qt_config.prf \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\win32-msvc\qmake.conf \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\spec_post.prf \
+		.qmake.stash \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\exclusive_builds.prf \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\common\msvc-version.conf \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\toolchain.prf \
@@ -294,9 +295,7 @@ Makefile: ..\..\LandLords.pro ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\wi
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Network.prl \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Core.prl \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\qtmain.prl \
-		.qmake.stash \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\build_pass.prf \
-		..\..\resource.qrc \
 		debug\qmake_qmake_qm_files.qrc \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Multimediad.prl \
 		..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Widgetsd.prl \
@@ -484,6 +483,7 @@ Makefile: ..\..\LandLords.pro ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\wi
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\qt_config.prf:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\win32-msvc\qmake.conf:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\spec_post.prf:
+.qmake.stash:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\exclusive_builds.prf:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\common\msvc-version.conf:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\toolchain.prf:
@@ -516,9 +516,7 @@ Makefile: ..\..\LandLords.pro ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\wi
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Network.prl:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Core.prl:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\qtmain.prl:
-.qmake.stash:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\mkspecs\features\build_pass.prf:
-..\..\resource.qrc:
 debug\qmake_qmake_qm_files.qrc:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Multimediad.prl:
 ..\..\..\..\qt5.15.2\5.15.2\msvc2019_64\lib\Qt5Widgetsd.prl:
